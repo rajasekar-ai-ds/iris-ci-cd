@@ -1,0 +1,6 @@
+[tool.pytest.ini_options] # without this our pytest will guess the base dir by walking up
+pythonpath = ["."]
+testpaths = ["tests"] # tells pytest where to look when we run bare pytest
+
+
+
