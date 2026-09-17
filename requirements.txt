@@ -1,6 +1,9 @@
-fastapi
-uvicorn
-scikit-learn
-numpy
-pytest
+fastapi==0.140.0
+uvicorn==0.51.0
+scikit-learn==1.9.0
+numpy==2.5.1
+
+
+
+
 

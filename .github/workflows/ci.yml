@@ -1,0 +1,42 @@
+
+name: CI-CD
+
+on:
+  push:
+    branches: [ main ]
+
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Train the Model
+        run: python train.py
+
+      - name: Run Tests
+        run: pytest
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: rajasekar6
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and tag image
+        run: docker build -t rajasekar6/iris-ci:${{ github.sha }} -t rajasekar6/iris-ci:latest .
+
+      - name: Push image
+        run: docker push --all-tags rajasekar6/iris-ci
