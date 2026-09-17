@@ -21,7 +21,7 @@ def test_health(client):
     response = client.get("/health")
     # the client job is to hand us a response object and we will do assertion for status_code
     # and json()
-    assert response.status_code == 500 # status = ok (200)
+    assert response.status_code == 200 # status = ok (200)
     assert response.json() == {'status' : 'ok'}
 
 
