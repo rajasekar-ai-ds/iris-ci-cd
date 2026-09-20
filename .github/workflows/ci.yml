@@ -66,6 +66,7 @@ jobs:
           if ! git diff --quiet k8s/iris.yaml; then
             git add k8s/iris.yaml
             git commit -m " Updated the k8s/iris.yaml iris image with ${{ github.sha }}"
+            git pull --rebase
             git push 
           fi 
           
