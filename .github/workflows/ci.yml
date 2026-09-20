@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
 
       - name: Set up Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
@@ -31,7 +31,7 @@ jobs:
         run: pytest
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v4
+        uses: docker/login-action@v3
         with:
           username: rajasekar6
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -41,3 +41,33 @@ jobs:
 
       - name: Push image
         run: docker push --all-tags rajasekar6/iris-ci
+
+
+  update-manifest:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    needs: build-and-push
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Update Sha
+        run: sed -i "s|rajasekar6/iris-ci:.*|rajasekar6/iris-ci:${{ github.sha }}|" k8s/iris.yaml
+
+
+      - name: Git Config, Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet k8s/iris.yaml; then
+            git add k8s/iris.yaml
+            git commit -m " Updated the k8s/iris.yaml iris image with ${{ github.sha }}"
+            git push 
+          fi 
+          
+          
+        
