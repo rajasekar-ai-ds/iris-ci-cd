@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: iris-serve
-          image: rajasekar6/iris-ci:a6c933e8b26412488b158229cc82c988b05318f5
+          image: rajasekar6/iris-ci:c754c2c12ca6980798ae1f3a6cb039cdfc8de96f
           imagePullPolicy: IfNotPresent
 
           resources:
